@@ -1,0 +1,15 @@
+name: aqi-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - pandas
+  - scikit-learn
+  - mlflow
+  - numpy
+  - joblib
+  - tensorflow==2.18.0
+  - pip
+  - pip:
+    - ipykernel 
