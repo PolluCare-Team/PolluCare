@@ -12,17 +12,17 @@ from geopy.distance import geodesic
 
 # --- Antarmuka Streamlit ---
 st.set_page_config(
-    page_title="PolluCare: Prediksi Kualitas Udara & Saran Kesehatan",
+    page_title="PolluCare",
     layout="centered",
     initial_sidebar_state="auto",
     menu_items={
-        'Get Help': 'https://www.dicoding.com/academies/338',
-        'Report a bug': 'https://github.com/your-repo/issues', # Ganti dengan link repo Anda
-        'About': 'PolluCare: Solusi AI untuk Kualitas Udara yang Lebih Baik!'
+        'Get Help': 'https://github.com/PolluCare-Team/PolluCare/',
+        'Report a bug': 'https://github.com/PolluCare-Team/PolluCare/', # Ganti dengan link repo Anda
+        'About': 'PolluCare: Prediksi Kualitas Udara & Saran Kesehatan'
     }
 )
 
-st.title("PolluCare: Prediksi Kualitas Udara & Saran Kesehatan 🌬️")
+st.title("PolluCare: Prediksi Kualitas Udara & Saran Kesehatan")
 st.markdown(
     "Selamat datang di PolluCare! Aplikasi ini didukung AI untuk membantu Anda memahami kualitas udara di lokasi Anda "
     "dan memberikan saran kesehatan yang dipersonalisasi. Mari jaga kesehatan pernapasan kita bersama!"
@@ -36,7 +36,7 @@ OPENWEATHER_API_KEY = "a38218a0a52f61f3e854c91d96906638"
 GEMINI_API_KEY = "AIzaSyDRys2TDy1B2-mHYQwkDUj1nTfogxnjL3Q"
 
 # Path ke model DNN TensorFlow Anda
-MODEL_PATH = "air_quality_dnn_model.h5"
+MODEL_PATH = "MLProject/models/air_quality_dnn_model.h5"
 
 # Pemetaan manual untuk kategori AQI.
 AQI_CATEGORY_MAP = {
