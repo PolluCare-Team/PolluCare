@@ -1,1 +1,74 @@
+name: Train AQI Model and Save to Repo
 
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache conda environment
+        uses: actions/cache@v3
+        with:
+          path: ~/.conda/envs/aqi-env
+          key: ${{ runner.os }}-conda-env-${{ hashFiles('MLProject/conda.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-conda-env-
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          python-version: 3.12.7
+          activate-environment: aqi-env
+          environment-file: MLProject/conda.yml
+          auto-activate-base: false
+          use-mamba: true
+
+      - name: Run MLflow project
+        run: |
+          mlflow run MLProject/ --env-manager=local --experiment-name=AQI_Classification_CI
+        shell: bash -l {0}
+
+      - name: Copy model artifacts to repository folder
+        run: |
+          echo "Contents of MLProject/models:"
+          ls -R MLProject/models
+
+      - name: Commit and push trained model artifact
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git pull origin main
+          git add MLProject/models
+          git commit -m "Add trained model artifact [CI skip]" || echo "Nothing to commit"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
+
+  docker:
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: MLProject
+          file: MLProject/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/aqi-model:latest,${{ secrets.DOCKERHUB_USERNAME }}/aqi-model:${{ github.sha }}
