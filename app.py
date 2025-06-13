@@ -463,7 +463,7 @@ if st.button("Dapatkan Prediksi & Saran Kesehatan 🚀", key="predict_button"):
                         st.markdown(
                             f"<div style='background-color:#e0f7fa; padding: 20px; border-radius: 10px; border-left: 5px solid #00acc1; text-align: justify'>"
                             f"<p style='color: #00acc1; font-weight: bold;'>Halo! Perkenalkan saya Pollucare, asisten kesehatan Anda. </p>"
-                            f"<p>{health_advice}</p>" # Konten saran dari Gemini
+                            f"<p style='color: black'>{health_advice}</p>" # Konten saran dari Gemini
                             f"</div>",
                             unsafe_allow_html=True
                         )
